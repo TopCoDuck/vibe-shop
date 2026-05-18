@@ -1,0 +1,18 @@
+# Maven
+target/
+*.jar
+*.war
+*.ear
+
+# Spring
+*.pid
+application-local.yml
+application-prod.yml
+
+# IDE
+.idea/
+*.iml
+
+# Logs
+*.log
+logs/

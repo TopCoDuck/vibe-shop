@@ -1,0 +1,59 @@
+<template>
+  <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4">
+    <div class="max-w-md w-full">
+      <div class="text-center mb-8">
+        <RouterLink to="/" class="text-3xl font-bold text-red-500">Vibe Shop</RouterLink>
+        <h2 class="mt-4 text-2xl font-bold text-gray-900">로그인</h2>
+      </div>
+      <div class="card">
+        <form @submit.prevent="handleLogin" class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">이메일</label>
+            <input v-model="form.email" type="email" required class="input-field" placeholder="이메일 입력" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">비밀번호</label>
+            <input v-model="form.password" type="password" required class="input-field" placeholder="비밀번호 입력" />
+          </div>
+          <p v-if="error" class="text-red-500 text-sm">{{ error }}</p>
+          <button type="submit" :disabled="loading" class="btn-primary w-full">
+            {{ loading ? '로그인 중...' : '로그인' }}
+          </button>
+        </form>
+        <p class="text-center text-sm text-gray-500 mt-4">
+          계정이 없으신가요?
+          <RouterLink to="/signup" class="text-red-500 font-medium hover:underline">회원가입</RouterLink>
+        </p>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, reactive } from 'vue'
+import { useRouter, RouterLink } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+import { useCartStore } from '@/stores/cart'
+
+const auth = useAuthStore()
+const cartStore = useCartStore()
+const router = useRouter()
+
+const form = reactive({ email: '', password: '' })
+const loading = ref(false)
+const error = ref('')
+
+async function handleLogin() {
+  loading.value = true
+  error.value = ''
+  try {
+    await auth.login(form.email, form.password)
+    await cartStore.fetchCart()
+    router.push('/')
+  } catch (e: any) {
+    error.value = e.response?.data?.message || '로그인에 실패했습니다.'
+  } finally {
+    loading.value = false
+  }
+}
+</script>
