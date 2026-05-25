@@ -111,6 +111,39 @@ export interface Faq {
   sortOrder: number
 }
 
+export interface Coupon {
+  id: number
+  name: string
+  description?: string
+  type: 'PERCENTAGE' | 'FIXED'
+  value: number
+  minOrderAmount: number
+  maxDiscountAmount: number
+  targetCategory?: string
+  startDate: string
+  endDate: string
+  totalCount: number
+  downloadedCount: number
+  downloadable: boolean
+  alreadyDownloaded: boolean
+}
+
+export interface MyCoupon {
+  userCouponId: number
+  couponId: number
+  name: string
+  description?: string
+  type: 'PERCENTAGE' | 'FIXED'
+  value: number
+  minOrderAmount: number
+  maxDiscountAmount: number
+  targetCategory?: string
+  endDate: string
+  used: boolean
+  downloadedAt: string
+  usedAt?: string
+}
+
 export const ORDER_STATUS_LABEL: Record<string, string> = {
   PENDING: '주문 대기',
   PAID: '결제 완료',

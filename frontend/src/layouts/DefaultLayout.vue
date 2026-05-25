@@ -127,7 +127,7 @@
         <span class="hover:text-red-500 cursor-pointer">로켓직구</span>
         <span class="hover:text-red-500 cursor-pointer">골드박스</span>
         <span class="hover:text-red-500 cursor-pointer">와우회원</span>
-        <span class="hover:text-red-500 cursor-pointer">이벤트/쿠폰</span>
+        <RouterLink to="/events" class="hover:text-red-500">이벤트/쿠폰</RouterLink>
         <span class="font-bold text-red-500 cursor-pointer">오늘만 특가</span>
       </div>
     </header>
