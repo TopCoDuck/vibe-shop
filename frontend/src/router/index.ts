@@ -60,6 +60,11 @@ const router = createRouter({
       name: 'Signup',
       component: () => import('@/pages/auth/SignupPage.vue'),
       meta: { guestOnly: true }
+    },
+    {
+      path: '/seller/signup',
+      name: 'SellerSignup',
+      component: () => import('@/pages/vendor/VendorSignupPage.vue'),
     }
   ],
   scrollBehavior: () => ({ top: 0 })
