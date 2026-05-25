@@ -20,7 +20,11 @@
       <!-- 상품 정보 -->
       <div class="flex flex-col">
         <p class="text-sm text-gray-400 mb-2">{{ product.categoryName }}</p>
-        <h1 class="text-2xl font-bold text-gray-900 mb-4">{{ product.name }}</h1>
+        <div class="flex items-start justify-between mb-4">
+          <h1 class="text-2xl font-bold text-gray-900 flex-1 mr-3">{{ product.name }}</h1>
+          <!-- 찜하기 버튼 -->
+          <WishlistButton :productId="product.id" class="flex-shrink-0 mt-1" />
+        </div>
         <p class="text-3xl font-bold text-red-500 mb-6">{{ formatPrice(product.price) }}</p>
 
         <div class="bg-gray-50 rounded-lg p-4 mb-6">
@@ -69,13 +73,16 @@ import { useRoute, useRouter } from 'vue-router'
 import { productApi } from '@/api/products'
 import { useCartStore } from '@/stores/cart'
 import { useAuthStore } from '@/stores/auth'
+import { useWishlistStore } from '@/stores/wishlist'
 import { formatPrice } from '@/utils/format'
 import type { Product } from '@/types'
+import WishlistButton from '@/components/product/WishlistButton.vue'
 
 const route = useRoute()
 const router = useRouter()
 const cartStore = useCartStore()
 const auth = useAuthStore()
+const wishlistStore = useWishlistStore()
 
 const product = ref<Product | null>(null)
 const loading = ref(false)
@@ -88,6 +95,10 @@ async function fetchProduct() {
   try {
     const res = await productApi.getOne(Number(route.params.id))
     product.value = res.data.data
+    // 로그인 상태면 찜 여부 로드
+    if (auth.isLoggedIn && !wishlistStore.loaded) {
+      await wishlistStore.fetchWishlistIds()
+    }
   } finally {
     loading.value = false
   }

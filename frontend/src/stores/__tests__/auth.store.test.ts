@@ -55,7 +55,8 @@ describe('useAuthStore', () => {
 
     expect(store.token).toBe('mock-access-token')
     expect(store.isLoggedIn).toBe(true)
-    expect(localStorage.setItem).toHaveBeenCalledWith('accessToken', 'mock-access-token')
+    // 자동 로그인 미사용(기본값 false) 시 sessionStorage에 저장
+    expect(sessionStorage.setItem).toHaveBeenCalledWith('accessToken', 'mock-access-token')
   })
 
   it('로그아웃 - 상태 초기화', async () => {

@@ -51,7 +51,7 @@ test.describe('인증 플로우', () => {
       await page.getByPlaceholder('비밀번호 입력').fill('wrongPassword!')
       await page.getByRole('button', { name: '로그인' }).click()
 
-      await expect(page.getByText(/로그인에 실패|아이디 또는 비밀번호/)).toBeVisible()
+      await expect(page.getByText(/로그인에 실패|이메일 또는 비밀번호/)).toBeVisible()
     })
 
     test('로그인 없이 장바구니 접근 시 로그인 페이지로 리다이렉트', async ({ page }) => {

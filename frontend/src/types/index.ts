@@ -81,6 +81,17 @@ export interface Order {
   createdAt: string
 }
 
+export interface WishlistItem {
+  id: number
+  productId: number
+  productName: string
+  imageUrl?: string
+  price: number
+  categoryName?: string
+  stock: number
+  createdAt: string
+}
+
 export const ORDER_STATUS_LABEL: Record<string, string> = {
   PENDING: '주문 대기',
   PAID: '결제 완료',

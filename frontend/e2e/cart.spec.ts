@@ -35,8 +35,8 @@ test.describe('장바구니 플로우', () => {
     await page.goto('/cart')
     await expect(page).toHaveURL('/cart')
 
-    // 상품이 장바구니에 있음을 확인
-    const cartItems = page.locator('[class*="cart"]').filter({ hasText: /원/ })
+    // 상품이 장바구니에 있음을 확인 (cart 아이템은 div.card 안에 가격이 표시됨)
+    const cartItems = page.locator('div.card').filter({ hasText: /원/ })
     await expect(cartItems.first()).toBeVisible({ timeout: 5000 })
   })
 

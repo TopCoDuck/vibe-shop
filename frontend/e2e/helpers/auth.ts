@@ -26,6 +26,9 @@ export async function logout(page: Page) {
   await page.evaluate(() => {
     localStorage.removeItem('accessToken')
     localStorage.removeItem('refreshToken')
+    localStorage.removeItem('autoLoginExpiry')
+    sessionStorage.removeItem('accessToken')
+    sessionStorage.removeItem('refreshToken')
   })
   await page.goto('/')
 }
