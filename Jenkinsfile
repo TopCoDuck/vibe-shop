@@ -41,7 +41,7 @@ pipeline {
                     steps {
                         echo '🔨 백엔드 빌드 (Gradle)'
                         dir(BACKEND_DIR) {
-                            bat "set JAVA_HOME=${env.JAVA_HOME} && gradlew.bat clean build -x test --no-daemon"
+                            bat "gradlew.bat clean build -x test --no-daemon"
                         }
                     }
                 }
@@ -62,7 +62,7 @@ pipeline {
             steps {
                 echo '🧪 백엔드 테스트 실행'
                 dir(BACKEND_DIR) {
-                    bat "set JAVA_HOME=${env.JAVA_HOME} && gradlew.bat test --no-daemon"
+                    bat "gradlew.bat test --no-daemon"
                 }
             }
             post {
@@ -99,8 +99,7 @@ pipeline {
 
                 // Spring Boot 백그라운드 실행
                 bat """
-                    set JAVA_HOME=${env.JAVA_HOME}
-                    start /B "" "${env.JAVA_HOME}\\bin\\java.exe" ^
+                    start /B "" "%JAVA_HOME%\\bin\\java.exe" ^
                         --enable-native-access=ALL-UNNAMED ^
                         -jar "${env.DEPLOY_DIR}\\app.jar" ^
                         > "${env.DEPLOY_DIR}\\app.log" 2>&1
