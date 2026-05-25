@@ -1,8 +1,13 @@
 # Maven
 target/
-*.jar
 *.war
 *.ear
+
+# Gradle
+build/
+.gradle/
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
 
 # Spring
 *.pid
