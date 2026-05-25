@@ -8,7 +8,8 @@ const router = createRouter({
       path: '/',
       component: () => import('@/layouts/DefaultLayout.vue'),
       children: [
-        { path: '', name: 'Home', component: () => import('@/pages/product/ProductListPage.vue') },
+        { path: '', name: 'Home', component: () => import('@/pages/home/HomePage.vue') },
+        { path: 'products', name: 'ProductList', component: () => import('@/pages/product/ProductListPage.vue') },
         { path: 'products/:id', name: 'ProductDetail', component: () => import('@/pages/product/ProductDetailPage.vue') },
         {
           path: 'cart', name: 'Cart',
@@ -34,7 +35,8 @@ const router = createRouter({
           path: 'mypage', name: 'MyPage',
           component: () => import('@/pages/mypage/MyPage.vue'),
           meta: { requiresAuth: true }
-        }
+        },
+        { path: 'cs', name: 'CustomerService', component: () => import('@/pages/cs/CustomerServicePage.vue') }
       ]
     },
     {

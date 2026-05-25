@@ -7,19 +7,40 @@
         <!-- 배송 정보 -->
         <div class="card">
           <h2 class="font-semibold text-gray-800 mb-4">배송 정보</h2>
-          <div class="space-y-3">
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">수령인 *</label>
-              <input v-model="form.receiverName" class="input-field" placeholder="수령인 이름" />
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">연락처 *</label>
-              <input v-model="form.receiverPhone" class="input-field" placeholder="010-0000-0000" />
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">배송 주소 *</label>
-              <input v-model="form.shippingAddress" class="input-field" placeholder="배송 주소를 입력해주세요" />
-            </div>
+          <div class="space-y-1">
+            <FormField
+              ref="nameRef"
+              v-model="form.receiverName"
+              label="수령인"
+              type="text"
+              placeholder="수령인 이름을 입력해주세요"
+              :required="true"
+              :rules="[rules.name()]"
+              success-message="확인되었습니다."
+            />
+
+            <FormField
+              ref="phoneRef"
+              v-model="form.receiverPhone"
+              label="연락처"
+              type="tel"
+              placeholder="010-0000-0000"
+              :required="true"
+              :rules="[rules.phone(true)]"
+              hint="예: 010-1234-5678"
+              success-message="올바른 번호입니다."
+            />
+
+            <FormField
+              ref="addressRef"
+              v-model="form.shippingAddress"
+              label="배송 주소"
+              type="text"
+              placeholder="배송 주소를 입력해주세요"
+              :required="true"
+              :rules="[rules.address()]"
+              success-message="주소가 입력되었습니다."
+            />
           </div>
         </div>
 
@@ -56,8 +77,19 @@
           <div class="border-t pt-4 flex justify-between font-bold text-lg mb-4">
             <span>합계</span><span class="text-red-500">{{ formatPrice(cartStore.totalAmount) }}</span>
           </div>
-          <p v-if="error" class="text-red-500 text-sm mb-3">{{ error }}</p>
-          <button @click="placeOrder" :disabled="loading || cartStore.items.length === 0" class="btn-primary w-full">
+          <p v-if="serverError" class="text-red-500 text-sm mb-3 flex items-center gap-1">
+            <svg class="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd"
+                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                clip-rule="evenodd" />
+            </svg>
+            {{ serverError }}
+          </p>
+          <button
+            @click="placeOrder"
+            :disabled="loading || cartStore.items.length === 0"
+            class="btn-primary w-full"
+          >
             {{ loading ? '주문 처리 중...' : '결제하기' }}
           </button>
         </div>
@@ -72,28 +104,38 @@ import { useRouter } from 'vue-router'
 import { orderApi } from '@/api/orders'
 import { useCartStore } from '@/stores/cart'
 import { formatPrice } from '@/utils/format'
+import FormField from '@/components/common/FormField.vue'
+import { rules } from '@/utils/validationRules'
 
 const cartStore = useCartStore()
 const router = useRouter()
 
 const form = reactive({ receiverName: '', receiverPhone: '', shippingAddress: '' })
 const loading = ref(false)
-const error = ref('')
+const serverError = ref('')
+
+const nameRef    = ref<InstanceType<typeof FormField> | null>(null)
+const phoneRef   = ref<InstanceType<typeof FormField> | null>(null)
+const addressRef = ref<InstanceType<typeof FormField> | null>(null)
 
 async function placeOrder() {
-  if (!form.receiverName || !form.receiverPhone || !form.shippingAddress) {
-    error.value = '배송 정보를 모두 입력해주세요.'
-    return
-  }
+  // 전체 touch → 미입력 필드 즉시 에러 표시
+  nameRef.value?.touch()
+  phoneRef.value?.touch()
+  addressRef.value?.touch()
+
+  const hasAnyError = [nameRef, phoneRef, addressRef].some(r => r.value?.hasError)
+  if (hasAnyError) return
+
   loading.value = true
-  error.value = ''
+  serverError.value = ''
   try {
     const cartItemIds = cartStore.items.map(i => i.id)
     const res = await orderApi.createOrder({ ...form, cartItemIds })
     await cartStore.fetchCart()
     router.push(`/orders/${res.data.data.id}`)
   } catch (e: any) {
-    error.value = e.response?.data?.message || '주문에 실패했습니다.'
+    serverError.value = e.response?.data?.message || '주문에 실패했습니다.'
   } finally {
     loading.value = false
   }

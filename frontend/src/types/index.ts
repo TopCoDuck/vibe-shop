@@ -92,6 +92,25 @@ export interface WishlistItem {
   createdAt: string
 }
 
+export interface Inquiry {
+  id: number
+  type: string
+  content: string
+  replyMethod: string
+  imageUrls?: string
+  status: string
+  createdAt: string
+}
+
+export interface Faq {
+  id: number
+  category: string
+  question: string
+  answer: string
+  link?: string
+  sortOrder: number
+}
+
 export const ORDER_STATUS_LABEL: Record<string, string> = {
   PENDING: '주문 대기',
   PAID: '결제 완료',

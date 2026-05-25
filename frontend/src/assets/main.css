@@ -9,6 +9,7 @@
 }
 
 @layer components {
+  /* ── 기존 클래스: admin/mypage/order 페이지가 의존하므로 그대로 유지 ── */
   .btn-primary {
     @apply bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
   }
@@ -26,5 +27,38 @@
   }
   .badge {
     @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  /* ── 쿠팡 톤 신규 컴포넌트 ── */
+  /* 검색바: 빨간 두께 보더 + 우측 빨간 아이콘 박스 (쿠팡 헤더용) */
+  .input-search {
+    @apply w-full border-2 border-red-500 rounded px-4 py-2.5 pr-12 text-sm focus:outline-none focus:border-red-600;
+  }
+  /* 정사각 라운드 카드 (상품 목록 밀도용) */
+  .card-flat {
+    @apply bg-white rounded border border-gray-200;
+  }
+  /* 사각형 뱃지 (라운드보다 정보 밀도가 높음) */
+  .badge-sq {
+    @apply inline-flex items-center px-1.5 py-0.5 rounded text-[11px] font-bold leading-none;
+  }
+  .badge-rocket {
+    @apply badge-sq bg-rocket-500 text-white;
+  }
+  .badge-discount {
+    @apply badge-sq bg-red-500 text-white;
+  }
+  .badge-best {
+    @apply badge-sq bg-deal-400 text-gray-900;
+  }
+  .badge-coupon {
+    @apply badge-sq bg-deal-100 text-deal-700;
+  }
+  /* 쿠팡 톤 굵은 CTA */
+  .btn-primary-bold {
+    @apply bg-red-500 hover:bg-red-600 text-white font-bold py-3.5 px-4 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-outline-bold {
+    @apply bg-white border border-gray-300 hover:border-gray-400 text-gray-800 font-bold py-3.5 px-4 rounded transition-colors disabled:opacity-50;
   }
 }
