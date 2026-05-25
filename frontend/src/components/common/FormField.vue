@@ -101,7 +101,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, useId } from 'vue'
+import { ref, computed } from 'vue'
 
 interface Props {
   modelValue: string
