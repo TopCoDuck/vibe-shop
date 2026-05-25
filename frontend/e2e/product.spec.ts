@@ -8,7 +8,7 @@ test.describe('상품 플로우', () => {
     // 상품 목록 로딩 대기
     await page.waitForSelector('.card', { timeout: 10000 })
 
-    const productCards = page.locator('.card a')
+    const productCards = page.locator('a.card')
     await expect(productCards.first()).toBeVisible()
   })
 
@@ -30,7 +30,7 @@ test.describe('상품 플로우', () => {
     await page.goto('/')
 
     // 첫 번째 상품 클릭
-    const firstProduct = page.locator('.card a').first()
+    const firstProduct = page.locator('a.card').first()
     await firstProduct.waitFor({ timeout: 10000 })
 
     const productName = await firstProduct.locator('h3').textContent()
@@ -47,8 +47,8 @@ test.describe('상품 플로우', () => {
 
   test('상품 상세 - 수량 증감 버튼 동작', async ({ page }) => {
     await page.goto('/')
-    await page.locator('.card a').first().waitFor({ timeout: 10000 })
-    await page.locator('.card a').first().click()
+    await page.locator('a.card').first().waitFor({ timeout: 10000 })
+    await page.locator('a.card').first().click()
     await page.waitForURL(/\/products\/\d+/)
 
     // 초기 수량 = 1
@@ -70,8 +70,8 @@ test.describe('상품 플로우', () => {
 
   test('로그인 없이 장바구니 담기 클릭 시 로그인 페이지로 이동', async ({ page }) => {
     await page.goto('/')
-    await page.locator('.card a').first().waitFor({ timeout: 10000 })
-    await page.locator('.card a').first().click()
+    await page.locator('a.card').first().waitFor({ timeout: 10000 })
+    await page.locator('a.card').first().click()
     await page.waitForURL(/\/products\/\d+/)
 
     await page.getByRole('button', { name: '장바구니 담기' }).click()

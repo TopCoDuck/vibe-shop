@@ -11,8 +11,8 @@ test.describe('장바구니 플로우', () => {
     await page.goto('/')
 
     // 첫 번째 상품으로 이동
-    await page.locator('.card a').first().waitFor({ timeout: 10000 })
-    await page.locator('.card a').first().click()
+    await page.locator('a.card').first().waitFor({ timeout: 10000 })
+    await page.locator('a.card').first().click()
     await page.waitForURL(/\/products\/\d+/)
 
     // 장바구니 담기
@@ -25,8 +25,8 @@ test.describe('장바구니 플로우', () => {
   test('장바구니 페이지 - 담긴 상품 표시', async ({ page }) => {
     // 상품 담기
     await page.goto('/')
-    await page.locator('.card a').first().waitFor({ timeout: 10000 })
-    await page.locator('.card a').first().click()
+    await page.locator('a.card').first().waitFor({ timeout: 10000 })
+    await page.locator('a.card').first().click()
     await page.waitForURL(/\/products\/\d+/)
     await page.getByRole('button', { name: '장바구니 담기' }).click()
     await page.waitForTimeout(500)
@@ -42,8 +42,8 @@ test.describe('장바구니 플로우', () => {
 
   test('바로 구매 - 장바구니 페이지로 바로 이동', async ({ page }) => {
     await page.goto('/')
-    await page.locator('.card a').first().waitFor({ timeout: 10000 })
-    await page.locator('.card a').first().click()
+    await page.locator('a.card').first().waitFor({ timeout: 10000 })
+    await page.locator('a.card').first().click()
     await page.waitForURL(/\/products\/\d+/)
 
     await page.getByRole('button', { name: '바로 구매' }).click()
@@ -61,8 +61,8 @@ test.describe('구매 플로우', () => {
   test('장바구니 → 주문하기 페이지 이동', async ({ page }) => {
     // 상품 담기
     await page.goto('/')
-    await page.locator('.card a').first().waitFor({ timeout: 10000 })
-    await page.locator('.card a').first().click()
+    await page.locator('a.card').first().waitFor({ timeout: 10000 })
+    await page.locator('a.card').first().click()
     await page.waitForURL(/\/products\/\d+/)
     await page.getByRole('button', { name: '바로 구매' }).click()
     await page.waitForURL('/cart')
