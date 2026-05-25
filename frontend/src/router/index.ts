@@ -8,7 +8,8 @@ const router = createRouter({
       path: '/',
       component: () => import('@/layouts/DefaultLayout.vue'),
       children: [
-        { path: '', name: 'Home', component: () => import('@/pages/product/ProductListPage.vue') },
+        { path: '', name: 'Home', component: () => import('@/pages/home/HomePage.vue') },
+        { path: 'products', name: 'ProductList', component: () => import('@/pages/product/ProductListPage.vue') },
         { path: 'products/:id', name: 'ProductDetail', component: () => import('@/pages/product/ProductDetailPage.vue') },
         {
           path: 'cart', name: 'Cart',

@@ -1,39 +1,5 @@
 <template>
   <div class="max-w-7xl mx-auto px-4 py-5">
-    <!-- ── 히어로 + 사이드 배너 (검색/카테고리 필터가 없을 때만) ── -->
-    <div v-if="!route.query.keyword && !route.query.categoryId"
-      class="grid grid-cols-1 md:grid-cols-[1fr_320px] gap-3 mb-5">
-      <!-- 메인 히어로 -->
-      <div class="relative rounded overflow-hidden h-[280px] md:h-[320px] bg-gradient-to-br from-red-500 to-red-700">
-        <div class="absolute inset-0 flex flex-col justify-center px-8 md:px-12 text-white">
-          <p class="text-sm font-semibold opacity-90">WOW MEMBERSHIP · 와우회원 단독</p>
-          <h1 class="text-3xl md:text-5xl font-black mt-2 leading-tight">
-            오늘만<br />최대 70% 할인
-          </h1>
-          <div class="mt-5 inline-block w-fit bg-white text-red-500 font-bold px-5 py-2.5 rounded text-sm">
-            지금 바로 보기 →
-          </div>
-        </div>
-      </div>
-      <!-- 사이드 배너 -->
-      <div class="grid grid-rows-2 gap-3">
-        <div class="rounded p-5 flex flex-col justify-between" style="background:#ffd8d8">
-          <div>
-            <p class="font-extrabold text-gray-900 text-lg">로켓프레시</p>
-            <p class="text-xs text-gray-700 mt-1">신선식품 새벽배송</p>
-          </div>
-          <p class="text-xs font-bold text-red-500">혜택 보기 →</p>
-        </div>
-        <div class="rounded p-5 flex flex-col justify-between" style="background:#d8e8ff">
-          <div>
-            <p class="font-extrabold text-gray-900 text-lg">로켓직구</p>
-            <p class="text-xs text-gray-700 mt-1">해외 빠른배송 무료</p>
-          </div>
-          <p class="text-xs font-bold text-rocket-500">혜택 보기 →</p>
-        </div>
-      </div>
-    </div>
-
     <div class="flex gap-5">
       <!-- ── 카테고리 + 필터 사이드바 ── -->
       <aside class="w-48 shrink-0 space-y-3 hidden md:block">
@@ -41,14 +7,14 @@
           <h2 class="font-extrabold text-gray-900 text-sm mb-3">카테고리</h2>
           <ul class="space-y-0.5">
             <li>
-              <RouterLink to="/"
+              <RouterLink to="/products"
                 class="block px-2 py-1.5 rounded text-[13px] hover:bg-red-50 hover:text-red-600"
                 :class="!route.query.categoryId ? 'bg-red-50 text-red-600 font-bold' : 'text-gray-700'">
                 전체
               </RouterLink>
             </li>
             <li v-for="cat in categoryStore.categories" :key="cat.id">
-              <RouterLink :to="{ path: '/', query: { categoryId: cat.id } }"
+              <RouterLink :to="{ path: '/products', query: { categoryId: cat.id } }"
                 class="block px-2 py-1.5 rounded text-[13px] hover:bg-red-50 hover:text-red-600"
                 :class="Number(route.query.categoryId) === cat.id ? 'bg-red-50 text-red-600 font-bold' : 'text-gray-700'">
                 {{ cat.name }}

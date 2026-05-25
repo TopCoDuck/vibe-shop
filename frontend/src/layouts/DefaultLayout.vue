@@ -78,12 +78,50 @@
 
       <!-- ── 카테고리 nav ── -->
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-3 flex items-center gap-6 text-sm text-gray-700">
-        <RouterLink to="/" class="font-bold text-red-500 flex items-center gap-1.5">
-          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z" />
-          </svg>
-          전체 카테고리
-        </RouterLink>
+        <!-- 전체 카테고리 드롭다운 -->
+        <div class="relative" ref="catMenuRef">
+          <button
+            @click="toggleCatMenu"
+            class="font-bold text-red-500 flex items-center gap-1.5 focus:outline-none"
+          >
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z" />
+            </svg>
+            전체 카테고리
+            <svg class="w-3 h-3 transition-transform" :class="catMenuOpen ? 'rotate-180' : ''" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+            </svg>
+          </button>
+
+          <!-- 드롭다운 패널 -->
+          <div
+            v-if="catMenuOpen"
+            class="absolute top-full left-0 mt-1 w-52 bg-white border border-gray-200 rounded shadow-lg z-50 py-1"
+          >
+            <RouterLink
+              to="/products"
+              @click="catMenuOpen = false"
+              class="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-red-50 hover:text-red-500 font-bold"
+            >
+              <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+              전체
+            </RouterLink>
+            <div class="border-t border-gray-100 my-1"></div>
+            <RouterLink
+              v-for="cat in categoryStore.categories"
+              :key="cat.id"
+              :to="{ path: '/products', query: { categoryId: cat.id } }"
+              @click="catMenuOpen = false"
+              class="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-red-50 hover:text-red-500"
+            >
+              <span class="w-4 h-4 flex items-center justify-center text-gray-400 text-xs">●</span>
+              {{ cat.name }}
+            </RouterLink>
+          </div>
+        </div>
+
         <span class="hover:text-red-500 cursor-pointer">로켓배송</span>
         <span class="hover:text-red-500 cursor-pointer">로켓프레시</span>
         <span class="hover:text-red-500 cursor-pointer">로켓직구</span>
@@ -107,17 +145,44 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter, RouterLink, RouterView } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useCartStore } from '@/stores/cart'
 import { useWishlistStore } from '@/stores/wishlist'
+import { useCategoryStore } from '@/stores/category'
 
 const auth = useAuthStore()
 const cartStore = useCartStore()
 const wishlistStore = useWishlistStore()
+const categoryStore = useCategoryStore()
 const router = useRouter()
 const keyword = ref('')
+
+// 전체 카테고리 드롭다운
+const catMenuOpen = ref(false)
+const catMenuRef = ref<HTMLElement | null>(null)
+
+function toggleCatMenu() {
+  catMenuOpen.value = !catMenuOpen.value
+}
+
+function onClickOutside(e: MouseEvent) {
+  if (catMenuRef.value && !catMenuRef.value.contains(e.target as Node)) {
+    catMenuOpen.value = false
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('click', onClickOutside)
+  if (categoryStore.categories.length === 0) {
+    categoryStore.fetchCategories()
+  }
+})
+
+onUnmounted(() => {
+  document.removeEventListener('click', onClickOutside)
+})
 
 if (auth.isLoggedIn) {
   cartStore.fetchCart()
@@ -126,7 +191,7 @@ if (auth.isLoggedIn) {
 
 function search() {
   if (keyword.value.trim()) {
-    router.push({ path: '/', query: { keyword: keyword.value } })
+    router.push({ path: '/products', query: { keyword: keyword.value } })
   }
 }
 
