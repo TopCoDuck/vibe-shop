@@ -1,8 +1,13 @@
 pipeline {
     agent any
 
+    tools {
+        jdk 'JDK-25'
+        nodejs 'NodeJS-22'
+    }
+
     environment {
-        JAVA_HOME    = 'C:\\Program Files\\Eclipse Adoptium\\jdk-25.0.3.9-hotspot'
+        JAVA_HOME    = tool('JDK-25')
         GRADLE_OPTS  = '--enable-native-access=ALL-UNNAMED'
         APP_NAME     = 'vibe-shop'
         BACKEND_DIR  = "${WORKSPACE}\\backend"
@@ -11,10 +16,6 @@ pipeline {
         PID_FILE     = 'D:\\deploy\\vibe-shop\\app.pid'
         NOTIFY_EMAIL = 'wpwp102@gmail.com'
         IS_MAIN      = "${env.BRANCH_NAME == 'main'}"
-    }
-
-    tools {
-        nodejs 'NodeJS-22'
     }
 
     options {
