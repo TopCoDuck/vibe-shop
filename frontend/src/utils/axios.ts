@@ -6,7 +6,7 @@ const instance = axios.create({
 })
 
 instance.interceptors.request.use(config => {
-  const token = localStorage.getItem('accessToken')
+  const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken')
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
   }
@@ -16,7 +16,10 @@ instance.interceptors.request.use(config => {
 instance.interceptors.response.use(
   res => res,
   async error => {
-    if (error.response?.status === 401) {
+    const url = error.config?.url ?? ''
+    const isAuthEndpoint = url.includes('/auth/login') || url.includes('/auth/signup')
+
+    if (error.response?.status === 401 && !isAuthEndpoint) {
       localStorage.removeItem('accessToken')
       localStorage.removeItem('refreshToken')
       window.location.href = '/login'

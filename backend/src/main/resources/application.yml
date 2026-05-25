@@ -23,7 +23,7 @@ server:
 jwt:
   secret: vibeshop-secret-key-must-be-at-least-256-bits-long-for-hs256-algorithm
   access-expiration: 3600000      # 1시간
-  refresh-expiration: 604800000   # 7일
+  refresh-expiration: 1209600000  # 14일
 
 cors:
   allowed-origins: http://localhost:3000

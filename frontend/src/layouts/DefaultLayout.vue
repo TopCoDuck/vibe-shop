@@ -29,7 +29,7 @@
 
             <template v-if="auth.isLoggedIn">
               <RouterLink v-if="auth.isAdmin" to="/admin" class="text-sm text-gray-600 hover:text-red-500">관리자</RouterLink>
-              <RouterLink to="/orders" class="text-sm text-gray-600 hover:text-red-500">주문내역</RouterLink>
+              <RouterLink to="/mypage" class="text-sm text-gray-600 hover:text-red-500">마이페이지</RouterLink>
               <button @click="logout" class="text-sm text-gray-600 hover:text-red-500">로그아웃</button>
             </template>
             <template v-else>
@@ -58,13 +58,18 @@ import { ref } from 'vue'
 import { useRouter, RouterLink, RouterView } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useCartStore } from '@/stores/cart'
+import { useWishlistStore } from '@/stores/wishlist'
 
 const auth = useAuthStore()
 const cartStore = useCartStore()
+const wishlistStore = useWishlistStore()
 const router = useRouter()
 const keyword = ref('')
 
-if (auth.isLoggedIn) cartStore.fetchCart()
+if (auth.isLoggedIn) {
+  cartStore.fetchCart()
+  wishlistStore.fetchWishlistIds()
+}
 
 function search() {
   if (keyword.value.trim()) {
@@ -74,6 +79,7 @@ function search() {
 
 function logout() {
   auth.logout()
+  wishlistStore.reset()
   router.push('/login')
 }
 </script>
