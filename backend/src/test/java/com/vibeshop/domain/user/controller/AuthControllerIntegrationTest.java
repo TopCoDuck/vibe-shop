@@ -57,7 +57,7 @@ class AuthControllerIntegrationTest {
         mockMvc.perform(post("/api/auth/signup")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.data.email").value("new@example.com"))
                 .andExpect(jsonPath("$.data.name").value("신규유저"));
     }
