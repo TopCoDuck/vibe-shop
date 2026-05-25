@@ -136,9 +136,9 @@ pipeline {
             script {
                 if (env.BRANCH_NAME == 'main') {
                     // main: 배포 성공 알림
-                    mail to: "${env.NOTIFY_EMAIL}",
-                         subject: "[${env.APP_NAME}] ✅ 배포 성공 - #${env.BUILD_NUMBER}",
-                         body: """
+                    emailext to: "${env.NOTIFY_EMAIL}",
+                             subject: "[${env.APP_NAME}] ✅ 배포 성공 - #${env.BUILD_NUMBER}",
+                             body: """
 배포 성공!
 
 프로젝트  : ${env.APP_NAME}
@@ -150,9 +150,9 @@ pipeline {
 """
                 } else {
                     // feature/*: 테스트 통과 알림
-                    mail to: "${env.NOTIFY_EMAIL}",
-                         subject: "[${env.APP_NAME}] ✅ 빌드/테스트 통과 - ${env.BRANCH_NAME} #${env.BUILD_NUMBER}",
-                         body: """
+                    emailext to: "${env.NOTIFY_EMAIL}",
+                             subject: "[${env.APP_NAME}] ✅ 빌드/테스트 통과 - ${env.BRANCH_NAME} #${env.BUILD_NUMBER}",
+                             body: """
 빌드 및 테스트 통과!
 
 프로젝트  : ${env.APP_NAME}
@@ -167,9 +167,9 @@ pipeline {
             }
         }
         failure {
-            mail to: "${env.NOTIFY_EMAIL}",
-                 subject: "[${env.APP_NAME}] ❌ 빌드 실패 - ${env.BRANCH_NAME} #${env.BUILD_NUMBER}",
-                 body: """
+            emailext to: "${env.NOTIFY_EMAIL}",
+                     subject: "[${env.APP_NAME}] ❌ 빌드 실패 - ${env.BRANCH_NAME} #${env.BUILD_NUMBER}",
+                     body: """
 빌드 실패!
 
 프로젝트  : ${env.APP_NAME}
