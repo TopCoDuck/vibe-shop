@@ -35,7 +35,8 @@ const router = createRouter({
           path: 'mypage', name: 'MyPage',
           component: () => import('@/pages/mypage/MyPage.vue'),
           meta: { requiresAuth: true }
-        }
+        },
+        { path: 'cs', name: 'CustomerService', component: () => import('@/pages/cs/CustomerServicePage.vue') }
       ]
     },
     {

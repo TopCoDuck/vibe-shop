@@ -4,7 +4,7 @@
       <!-- ── 상단 유틸바 ── -->
       <div class="border-b border-gray-100 text-xs text-gray-500">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-8 flex items-center justify-end gap-5">
-          <span class="cursor-pointer hover:text-red-500">고객센터</span>
+          <RouterLink to="/cs" class="hover:text-red-500">고객센터</RouterLink>
           <span class="cursor-pointer hover:text-red-500">입점신청</span>
           <template v-if="auth.isLoggedIn">
             <RouterLink v-if="auth.isAdmin" to="/admin" class="hover:text-red-500">관리자</RouterLink>
