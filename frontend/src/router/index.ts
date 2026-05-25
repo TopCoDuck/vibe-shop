@@ -36,7 +36,8 @@ const router = createRouter({
           component: () => import('@/pages/mypage/MyPage.vue'),
           meta: { requiresAuth: true }
         },
-        { path: 'cs', name: 'CustomerService', component: () => import('@/pages/cs/CustomerServicePage.vue') }
+        { path: 'cs', name: 'CustomerService', component: () => import('@/pages/cs/CustomerServicePage.vue') },
+        { path: 'events', name: 'Events', component: () => import('@/pages/event/EventPage.vue') },
       ]
     },
     {
@@ -60,6 +61,11 @@ const router = createRouter({
       name: 'Signup',
       component: () => import('@/pages/auth/SignupPage.vue'),
       meta: { guestOnly: true }
+    },
+    {
+      path: '/seller/signup',
+      name: 'SellerSignup',
+      component: () => import('@/pages/vendor/VendorSignupPage.vue'),
     }
   ],
   scrollBehavior: () => ({ top: 0 })

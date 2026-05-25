@@ -5,7 +5,7 @@
       <div class="border-b border-gray-100 text-xs text-gray-500">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-8 flex items-center justify-end gap-5">
           <RouterLink to="/cs" class="hover:text-red-500">고객센터</RouterLink>
-          <span class="cursor-pointer hover:text-red-500">입점신청</span>
+          <RouterLink to="/seller/signup" class="hover:text-red-500">입점신청</RouterLink>
           <template v-if="auth.isLoggedIn">
             <RouterLink v-if="auth.isAdmin" to="/admin" class="hover:text-red-500">관리자</RouterLink>
             <RouterLink to="/orders" class="hover:text-red-500">주문배송</RouterLink>
@@ -127,7 +127,7 @@
         <span class="hover:text-red-500 cursor-pointer">로켓직구</span>
         <span class="hover:text-red-500 cursor-pointer">골드박스</span>
         <span class="hover:text-red-500 cursor-pointer">와우회원</span>
-        <span class="hover:text-red-500 cursor-pointer">이벤트/쿠폰</span>
+        <RouterLink to="/events" class="hover:text-red-500">이벤트/쿠폰</RouterLink>
         <span class="font-bold text-red-500 cursor-pointer">오늘만 특가</span>
       </div>
     </header>
