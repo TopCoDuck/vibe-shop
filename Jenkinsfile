@@ -9,7 +9,7 @@ pipeline {
         FRONTEND_DIR = "${WORKSPACE}\\frontend"
         DEPLOY_DIR   = 'D:\\deploy\\vibe-shop'
         PID_FILE     = 'D:\\deploy\\vibe-shop\\app.pid'
-        NOTIFY_EMAIL = 'wpwp37@naver.com'
+        NOTIFY_EMAIL = 'wpwp102@gmail.com'
         IS_MAIN      = "${env.BRANCH_NAME == 'main'}"
     }
 
