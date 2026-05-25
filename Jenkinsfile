@@ -59,16 +59,28 @@ pipeline {
 
         // ──────────────────────────────────────────
         stage('Test') {
-            steps {
-                echo '🧪 백엔드 테스트 실행'
-                dir(BACKEND_DIR) {
-                    bat "gradlew.bat test --no-daemon"
+            parallel {
+                stage('Backend Test') {
+                    steps {
+                        echo '🧪 백엔드 테스트 실행'
+                        dir(BACKEND_DIR) {
+                            bat "gradlew.bat test --no-daemon"
+                        }
+                    }
+                    post {
+                        always {
+                            junit allowEmptyResults: true,
+                                  testResults: 'backend/build/test-results/test/*.xml'
+                        }
+                    }
                 }
-            }
-            post {
-                always {
-                    junit allowEmptyResults: true,
-                          testResults: 'backend/build/test-results/test/*.xml'
+                stage('Frontend Test') {
+                    steps {
+                        echo '🧪 프론트엔드 테스트 실행'
+                        dir(FRONTEND_DIR) {
+                            bat 'npm run test'
+                        }
+                    }
                 }
             }
         }
@@ -125,6 +137,32 @@ pipeline {
                 retry(5) {
                     sleep(time: 5, unit: 'SECONDS')
                     bat 'curl -f http://localhost:8080/api/products || exit 1'
+                }
+            }
+        }
+
+        // ──────────────────────────────────────────
+        // main 브랜치만 E2E 테스트
+        stage('E2E Test') {
+            when {
+                branch 'main'
+            }
+            steps {
+                echo '🎭 Playwright E2E 테스트 실행'
+                dir(FRONTEND_DIR) {
+                    bat 'npm run test:e2e'
+                }
+            }
+            post {
+                always {
+                    publishHTML(target: [
+                        allowMissing: true,
+                        alwaysLinkToLastBuild: true,
+                        keepAll: true,
+                        reportDir: 'frontend/playwright-report',
+                        reportFiles: 'index.html',
+                        reportName: 'Playwright E2E Report'
+                    ])
                 }
             }
         }
