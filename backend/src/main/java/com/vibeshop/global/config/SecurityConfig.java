@@ -38,6 +38,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/faq/admin/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/api/coupons").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/events").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/products/*/reviews").permitAll()
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )

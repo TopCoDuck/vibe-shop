@@ -144,6 +144,25 @@ export interface MyCoupon {
   usedAt?: string
 }
 
+export interface Review {
+  id: number
+  userId: number
+  userName: string
+  productId: number
+  rating: number
+  title?: string
+  content: string
+  imageUrl?: string
+  createdAt: string
+  myReview: boolean
+}
+
+export interface ReviewSummary {
+  avgRating: number
+  totalCount: number
+  reviews: Review[]
+}
+
 export const ORDER_STATUS_LABEL: Record<string, string> = {
   PENDING: '주문 대기',
   PAID: '결제 완료',

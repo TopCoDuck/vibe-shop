@@ -129,6 +129,7 @@
           </p>
           <p v-else class="text-gray-400 text-sm">상품 상세 설명이 없습니다.</p>
         </div>
+        <ReviewSection v-else-if="activeTab === 1" :productId="product.id" />
         <div v-else class="py-20 text-center text-gray-400 text-sm">
           준비 중입니다.
         </div>
@@ -148,6 +149,7 @@ import { formatPrice } from '@/utils/format'
 import { getProductDisplay, formatRating } from '@/utils/productDisplay'
 import type { Product } from '@/types'
 import WishlistButton from '@/components/product/WishlistButton.vue'
+import ReviewSection from '@/components/product/ReviewSection.vue'
 
 const route = useRoute()
 const router = useRouter()
