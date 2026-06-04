@@ -2,11 +2,11 @@ package com.vibeshop.domain.order.controller;
 
 import com.vibeshop.domain.order.dto.OrderRequest;
 import com.vibeshop.domain.order.dto.OrderResponse;
+import com.vibeshop.domain.order.dto.StatusRequest;
 import com.vibeshop.domain.order.entity.OrderStatus;
 import com.vibeshop.domain.order.service.OrderService;
 import com.vibeshop.global.common.ApiResponse;
 import jakarta.validation.Valid;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -64,10 +64,5 @@ public class OrderController {
     public ResponseEntity<ApiResponse<Page<OrderResponse>>> getAllOrders(
             @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         return ResponseEntity.ok(ApiResponse.success(orderService.getAllOrders(pageable)));
-    }
-
-    @Getter
-    static class StatusRequest {
-        private String status;
     }
 }

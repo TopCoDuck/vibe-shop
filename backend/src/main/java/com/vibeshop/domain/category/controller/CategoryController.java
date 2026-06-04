@@ -1,9 +1,9 @@
 package com.vibeshop.domain.category.controller;
 
+import com.vibeshop.domain.category.dto.CategoryRequest;
 import com.vibeshop.domain.category.entity.Category;
 import com.vibeshop.domain.category.service.CategoryService;
 import com.vibeshop.global.common.ApiResponse;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,12 +43,5 @@ public class CategoryController {
     public ResponseEntity<ApiResponse<Void>> delete(@PathVariable Long id) {
         categoryService.delete(id);
         return ResponseEntity.ok(ApiResponse.success("카테고리가 삭제되었습니다.", null));
-    }
-
-    @Getter
-    static class CategoryRequest {
-        private String name;
-        private String description;
-        private Long parentId;
     }
 }

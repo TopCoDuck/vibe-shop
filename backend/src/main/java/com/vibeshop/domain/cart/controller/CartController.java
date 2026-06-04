@@ -1,9 +1,10 @@
 package com.vibeshop.domain.cart.controller;
 
 import com.vibeshop.domain.cart.dto.CartItemResponse;
+import com.vibeshop.domain.cart.dto.CartRequest;
+import com.vibeshop.domain.cart.dto.QuantityRequest;
 import com.vibeshop.domain.cart.service.CartService;
 import com.vibeshop.global.common.ApiResponse;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -54,16 +55,5 @@ public class CartController {
     public ResponseEntity<ApiResponse<Void>> clearCart(@AuthenticationPrincipal UserDetails userDetails) {
         cartService.clearCart(userDetails.getUsername());
         return ResponseEntity.ok(ApiResponse.success("장바구니를 비웠습니다.", null));
-    }
-
-    @Getter
-    static class CartRequest {
-        private Long productId;
-        private int quantity;
-    }
-
-    @Getter
-    static class QuantityRequest {
-        private int quantity;
     }
 }
