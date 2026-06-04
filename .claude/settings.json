@@ -1,0 +1,76 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git status)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git add*)",
+      "Bash(git push*)",
+      "Bash(git branch*)",
+      "Bash(git stash*)",
+      "Bash(npx vue-tsc*)",
+      "Bash(npm run*)",
+      "Bash(npx*)",
+      "Bash(curl http://localhost:*)",
+      "Bash(curl -s http://localhost:*)",
+      "Bash(curl -sv http://localhost:*)",
+      "Bash(mysql -u viber*)",
+      "Bash(netstat*)",
+      "Bash(ls*)",
+      "Bash(find*)",
+      "Bash(cat*)",
+      "Bash(head*)",
+      "Bash(tail*)",
+      "Bash(grep*)",
+      "Bash(echo*)",
+      "Bash(mkdir*)",
+      "Bash(sleep*)"
+    ],
+    "deny": [
+      "Bash(git push --force*)",
+      "Bash(git reset --hard*)",
+      "Bash(rm -rf /)"
+    ]
+  },
+  "env": {
+    "JAVA_HOME": "C:\\Program Files\\Eclipse Adoptium\\jdk-25.0.3.9-hotspot",
+    "VIBE_DB_URL": "jdbc:mysql://localhost:3306/vibeshop",
+    "VIBE_DB_USER": "viber",
+    "VIBE_BACKEND_URL": "http://localhost:8080",
+    "VIBE_FRONTEND_URL": "http://localhost:3000"
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if echo \"$CLAUDE_TOOL_INPUT\" | grep -qE 'git commit'; then cd \"D:/eclipse/workspace/vibe-shop/frontend\" && result=$(npx vue-tsc --noEmit 2>&1); if [ -n \"$result\" ]; then echo \"\\n❌ 커밋 전 타입 에러 발견 — 먼저 수정하세요:\\n$result\"; exit 2; fi; fi"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd \"D:/eclipse/workspace/vibe-shop/frontend\" && npx vue-tsc --noEmit 2>&1 | grep -E 'error TS' | head -5 | sed 's/^/⚠️  /' || true"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd \"D:/eclipse/workspace/vibe-shop\" && changed=$(git diff --name-only HEAD 2>/dev/null | wc -l | tr -d ' '); staged=$(git diff --cached --name-only 2>/dev/null | wc -l | tr -d ' '); if [ \"$changed\" -gt 0 ] || [ \"$staged\" -gt 0 ]; then echo \"📝 미커밋 변경: 수정 $changed개 / 스테이징 $staged개\"; fi"
+          }
+        ]
+      }
+    ]
+  }
+}
