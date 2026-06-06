@@ -144,6 +144,64 @@ export interface MyCoupon {
   usedAt?: string
 }
 
+export interface Review {
+  id: number
+  userId: number
+  userName: string
+  productId: number
+  rating: number
+  title?: string
+  content: string
+  imageUrl?: string
+  createdAt: string
+  myReview: boolean
+}
+
+export interface ReviewSummary {
+  avgRating: number
+  totalCount: number
+  reviews: Review[]
+}
+
+export type ClaimType = 'CANCEL' | 'RETURN' | 'EXCHANGE' | 'REFUND'
+export type ClaimReason = 'CHANGE_MIND' | 'DEFECTIVE' | 'WRONG_ITEM' | 'DIFFERENT_FROM_DESC' | 'DELAYED_DELIVERY' | 'OTHER'
+export type ClaimStatus = 'REQUESTED' | 'IN_PROGRESS' | 'COMPLETED' | 'REJECTED'
+
+export interface Claim {
+  id: number
+  orderId: number
+  type: ClaimType
+  reason: ClaimReason
+  reasonDetail?: string
+  imageUrl?: string
+  status: ClaimStatus
+  adminComment?: string
+  createdAt: string
+}
+
+export const CLAIM_TYPE_LABEL: Record<ClaimType, string> = {
+  CANCEL: '주문 취소',
+  RETURN: '반품',
+  EXCHANGE: '교환',
+  REFUND: '환불',
+}
+
+export const CLAIM_REASON_LABEL: Record<ClaimReason, string> = {
+  CHANGE_MIND: '단순 변심',
+  DEFECTIVE: '상품 불량/파손',
+  WRONG_ITEM: '오배송',
+  DIFFERENT_FROM_DESC: '상품 설명과 다름',
+  DELAYED_DELIVERY: '배송 지연',
+  OTHER: '기타',
+}
+
+export const CLAIM_STATUS_LABEL: Record<ClaimStatus, string> = {
+  REQUESTED: '접수',
+  IN_PROGRESS: '처리 중',
+  COMPLETED: '처리 완료',
+  REJECTED: '반려',
+}
+
 export const ORDER_STATUS_LABEL: Record<string, string> = {
   PENDING: '주문 대기',
   PAID: '결제 완료',

@@ -1,6 +1,13 @@
 <template>
   <div class="max-w-4xl mx-auto px-4 py-10">
-    <h1 class="text-2xl font-bold text-gray-900 mb-8">주문/결제</h1>
+    <h1 class="text-2xl font-bold text-gray-900 mb-5">주문/결제</h1>
+
+    <!-- 진행 스텝 -->
+    <div class="flex justify-center gap-8 md:gap-10 mb-8 text-sm">
+      <span class="text-gray-400 font-medium">01 장바구니</span>
+      <span class="text-red-500 font-extrabold">02 주문/결제</span>
+      <span class="text-gray-400 font-medium">03 주문완료</span>
+    </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
       <div class="lg:col-span-2 space-y-6">
@@ -133,9 +140,10 @@ async function placeOrder() {
     const cartItemIds = cartStore.items.map(i => i.id)
     const res = await orderApi.createOrder({ ...form, cartItemIds })
     await cartStore.fetchCart()
-    router.push(`/orders/${res.data.data.id}`)
+    router.push(`/orders/complete/${res.data.data.id}`)
   } catch (e: any) {
-    serverError.value = e.response?.data?.message || '주문에 실패했습니다.'
+    serverError.value = e.response?.data?.message
+      || (e.request ? '네트워크 연결을 확인해 주세요.' : '주문에 실패했습니다.')
   } finally {
     loading.value = false
   }

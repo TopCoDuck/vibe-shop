@@ -1,10 +1,10 @@
 package com.vibeshop.domain.faq.controller;
 
+import com.vibeshop.domain.faq.dto.FaqRequest;
 import com.vibeshop.domain.faq.dto.FaqResponse;
 import com.vibeshop.domain.faq.entity.Faq;
 import com.vibeshop.domain.faq.service.FaqService;
 import com.vibeshop.global.common.ApiResponse;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -50,15 +50,5 @@ public class FaqController {
     public ResponseEntity<ApiResponse<Void>> delete(@PathVariable Long id) {
         faqService.delete(id);
         return ResponseEntity.ok(ApiResponse.success("삭제되었습니다.", null));
-    }
-
-    @Getter
-    static class FaqRequest {
-        private String category;
-        private String question;
-        private String answer;
-        private String link;
-        private int sortOrder;
-        private boolean active = true;
     }
 }

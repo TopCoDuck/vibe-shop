@@ -14,6 +14,15 @@
         주문내역
       </button>
       <button
+        @click="activeTab = 'claims'"
+        :class="activeTab === 'claims'
+          ? 'border-b-2 border-red-500 text-red-500'
+          : 'text-gray-500 hover:text-gray-700'"
+        class="px-6 py-3 text-sm font-medium transition-colors"
+      >
+        클레임내역
+      </button>
+      <button
         @click="activeTab = 'wishlist'"
         :class="activeTab === 'wishlist'
           ? 'border-b-2 border-red-500 text-red-500'
@@ -74,6 +83,35 @@
         :total="totalPages"
         @change="onPageChange"
       />
+    </div>
+
+    <!-- 클레임내역 탭 -->
+    <div v-if="activeTab === 'claims'">
+      <div v-if="claimsLoading" class="space-y-3">
+        <div v-for="n in 3" :key="n" class="card animate-pulse h-24"></div>
+      </div>
+      <div v-else-if="claims.length === 0" class="text-center py-20 text-gray-400">
+        <p class="text-lg">클레임 내역이 없습니다.</p>
+      </div>
+      <div v-else class="space-y-3">
+        <RouterLink v-for="claim in claims" :key="claim.id"
+          :to="`/orders/${claim.orderId}`"
+          class="card block hover:shadow-md transition-shadow">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-sm text-gray-400">주문번호 #{{ claim.orderId }}</span>
+            <span :class="claimStatusClass(claim.status)"
+              class="text-xs font-bold px-2 py-0.5 rounded-full">
+              {{ CLAIM_STATUS_LABEL[claim.status] }}
+            </span>
+          </div>
+          <div class="flex items-center gap-2 text-sm">
+            <span class="font-semibold text-gray-800">{{ CLAIM_TYPE_LABEL[claim.type] }}</span>
+            <span class="text-gray-400">·</span>
+            <span class="text-gray-600">{{ CLAIM_REASON_LABEL[claim.reason] }}</span>
+          </div>
+          <p class="text-xs text-gray-400 mt-1.5">{{ formatDate(claim.createdAt) }}</p>
+        </RouterLink>
+      </div>
     </div>
 
     <!-- 찜리스트 탭 -->
@@ -142,13 +180,38 @@
 import { ref, onMounted, watch } from 'vue'
 import { RouterLink } from 'vue-router'
 import { orderApi } from '@/api/orders'
+import { claimApi } from '@/api/claim'
 import { useWishlistStore } from '@/stores/wishlist'
 import Pagination from '@/components/common/Pagination.vue'
 import { formatPrice, formatDate } from '@/utils/format'
-import { ORDER_STATUS_LABEL } from '@/types'
-import type { Order } from '@/types'
+import { ORDER_STATUS_LABEL, CLAIM_TYPE_LABEL, CLAIM_REASON_LABEL, CLAIM_STATUS_LABEL } from '@/types'
+import type { Order, Claim, ClaimStatus } from '@/types'
 
-const activeTab = ref<'orders' | 'wishlist'>('orders')
+const activeTab = ref<'orders' | 'claims' | 'wishlist'>('orders')
+
+// 클레임
+const claims = ref<Claim[]>([])
+const claimsLoading = ref(false)
+
+function claimStatusClass(status: ClaimStatus) {
+  const map: Record<ClaimStatus, string> = {
+    REQUESTED: 'bg-orange-100 text-orange-700',
+    IN_PROGRESS: 'bg-blue-100 text-blue-700',
+    COMPLETED: 'bg-green-100 text-green-700',
+    REJECTED: 'bg-gray-100 text-gray-500',
+  }
+  return map[status]
+}
+
+async function fetchClaims() {
+  claimsLoading.value = true
+  try {
+    const res = await claimApi.getMyClaims()
+    claims.value = res.data.data
+  } finally {
+    claimsLoading.value = false
+  }
+}
 
 const wishlistStore = useWishlistStore()
 const wishlistLoading = ref(false)
@@ -201,6 +264,7 @@ function onPageChange(page: number) {
 
 watch(activeTab, (tab) => {
   if (tab === 'wishlist') fetchWishlist()
+  if (tab === 'claims') fetchClaims()
 })
 
 onMounted(() => {

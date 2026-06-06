@@ -54,9 +54,12 @@
             </span>
           </div>
           <div class="hidden md:flex gap-4">
-            <button v-for="(s, i) in sortOptions" :key="s"
-              :class="i === 0 ? 'text-gray-900 font-bold' : 'text-gray-500 hover:text-gray-900'">
-              {{ s }}
+            <button v-for="s in sortOptions" :key="s.label"
+              @click="onSortChange(s)"
+              :class="currentSort.label === s.label
+                ? 'text-gray-900 font-bold'
+                : 'text-gray-500 hover:text-gray-900'">
+              {{ s.label }}
             </button>
           </div>
         </div>
@@ -104,10 +107,25 @@ const currentPage = ref(0)
 const totalPages = ref(0)
 const totalElements = ref(0)
 
-// UI 전용 옵션 (현재는 동작 X — 차후 백엔드 필터 추가 시 연결)
-const sortOptions = ['쿠팡 랭킹순', '낮은가격순', '높은가격순', '판매량순', '최신순']
+interface SortOption { label: string; sort: string }
+
+const sortOptions: SortOption[] = [
+  { label: '쿠팡 랭킹순', sort: 'createdAt,desc' },
+  { label: '낮은가격순',  sort: 'price,asc' },
+  { label: '높은가격순',  sort: 'price,desc' },
+  { label: '최신순',      sort: 'createdAt,desc' },
+]
+const currentSort = ref<SortOption>(sortOptions[0])
+
 const priceRanges = ['~ 3만원', '3만 ~ 5만원', '5만 ~ 10만원', '10만원 이상']
 const benefits = ['로켓배송', '로켓프레시', '로켓직구', '무료배송']
+
+function onSortChange(s: SortOption) {
+  if (currentSort.value.label === s.label) return
+  currentSort.value = s
+  currentPage.value = 0
+  fetchProducts()
+}
 
 async function fetchProducts() {
   loading.value = true
@@ -116,7 +134,8 @@ async function fetchProducts() {
       categoryId: route.query.categoryId ? Number(route.query.categoryId) : undefined,
       keyword: route.query.keyword as string | undefined,
       page: currentPage.value,
-      size: 12
+      size: 12,
+      sort: currentSort.value.sort,
     })
     const data = res.data.data
     products.value = data.content

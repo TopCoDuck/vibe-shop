@@ -2,7 +2,7 @@ import axios from '@/utils/axios'
 import type { ApiResponse, PageResponse, Product } from '@/types'
 
 export const productApi = {
-  getAll(params?: { categoryId?: number; keyword?: string; page?: number; size?: number }) {
+  getAll(params?: { categoryId?: number; keyword?: string; page?: number; size?: number; sort?: string }) {
     return axios.get<ApiResponse<PageResponse<Product>>>('/products', { params })
   },
   getOne(id: number) {
