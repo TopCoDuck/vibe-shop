@@ -114,9 +114,12 @@
               :key="cat.id"
               :to="{ path: '/products', query: { categoryId: cat.id } }"
               @click="catMenuOpen = false"
-              class="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-red-50 hover:text-red-500"
+              class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 hover:bg-red-50 hover:text-red-500"
             >
-              <span class="w-4 h-4 flex items-center justify-center text-gray-400 text-xs">●</span>
+              <span class="w-6 h-6 rounded-full flex items-center justify-center shrink-0 text-white text-xs"
+                :style="{ background: catIconBg(cat.name) }">
+                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24" v-html="catIconPath(cat.name)"></svg>
+              </span>
               {{ cat.name }}
             </RouterLink>
           </div>
@@ -187,6 +190,50 @@ onUnmounted(() => {
 if (auth.isLoggedIn) {
   cartStore.fetchCart()
   wishlistStore.fetchWishlistIds()
+}
+
+// 카테고리 아이콘 매핑
+const CAT_ICONS: Record<string, { bg: string; path: string }> = {
+  '전자제품': {
+    bg: '#3b82f6',
+    path: '<path d="M4 6a2 2 0 012-2h12a2 2 0 012 2v7a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm2 7h12V6H6v7zM2 19a1 1 0 011-1h18a1 1 0 010 2H3a1 1 0 01-1-1z"/>',
+  },
+  '패션/의류': {
+    bg: '#ec4899',
+    path: '<path d="M12 2C9.5 2 8 4 8 4L2 7l2 3 3-1.5V20h10V8.5L20 10l2-3-6-3s-1.5-2-4-2z"/>',
+  },
+  '식품/건강': {
+    bg: '#22c55e',
+    path: '<path d="M17 8C8 10 5.9 16.17 3.82 19.31A1 1 0 004.7 21C13 21 22 15.55 22 9a1 1 0 00-1.7-.74C19.71 8.82 18.44 9 17 9V8zM3 12a9 9 0 000 9 9 9 0 009-9 9 9 0 00-9 0z"/>',
+  },
+  '홈/리빙': {
+    bg: '#f97316',
+    path: '<path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>',
+  },
+  '스포츠/레저': {
+    bg: '#8b5cf6',
+    path: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM8.54 16.44l-.84-2.58-2.58-.84 1.84-1.84-.22-2.66 2.46 1.08 2.28-1.38-.38 2.64 1.88 1.92-2.66.22-1.78 1.44zm6.92 0l-1.78-1.44-2.66-.22 1.88-1.92-.38-2.64 2.28 1.38 2.46-1.08-.22 2.66 1.84 1.84-2.58.84-.84 2.58z"/>',
+  },
+  '도서/문구': {
+    bg: '#6366f1',
+    path: '<path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 14H7v-2h10v2zm0-4H7v-2h10v2zm0-4H7V6h10v2z"/>',
+  },
+  '뷰티/미용': {
+    bg: '#f43f5e',
+    path: '<path d="M12 2a5 5 0 015 5c0 3.5-3 7-5 9-2-2-5-5.5-5-9a5 5 0 015-5zm0 7a2 2 0 100-4 2 2 0 000 4z"/>',
+  },
+  '완구/취미': {
+    bg: '#eab308',
+    path: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/>',
+  },
+}
+const DEFAULT_ICON = { bg: '#9ca3af', path: '<circle cx="12" cy="12" r="4"/>' }
+
+function catIconBg(name: string): string {
+  return (CAT_ICONS[name] ?? DEFAULT_ICON).bg
+}
+function catIconPath(name: string): string {
+  return (CAT_ICONS[name] ?? DEFAULT_ICON).path
 }
 
 function search() {
